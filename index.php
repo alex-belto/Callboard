@@ -1,4 +1,4 @@
 <?php
 
-echo "Fuck";
+echo "Cat";
 include "layout.php";
