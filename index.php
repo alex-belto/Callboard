@@ -1,4 +1,5 @@
 <?php
 
-echo "Cat";
-include "layout.php";
+$content="Cat";
+
+include 'layout.php';
