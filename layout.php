@@ -16,7 +16,7 @@
             </ul>
         </header>
         <main>
-            <?= $form_content?>
+            <?= $form_content ?>
             <?= $content ?>
         </main>
     </body>
