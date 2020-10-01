@@ -9,7 +9,7 @@ $form_content="
     <p>Введите ваш email:</p>
     <input type='email' name='email'>
     <p>Введите номер вашего телефона:</p>
-    <input type='tel' name='phone'>
+    <input type='tel' name='phone'><br><br>
     <input type='submit' name='submit' value='Отправить'>
 </form> ";
 
