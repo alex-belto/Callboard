@@ -9,13 +9,14 @@
     <body>
         <header>
             <ul>
-                <li><a href="">Callboard</a></li>
-                <li><a href="">Приютить</a></li>
-                <li><a href="">Потеряшки</a></li>
+                <li><a href="index.php">Callboard</a></li>
+                <li><a href="shelter.php">Приютить</a></li>
+                <li><a href="lost.php">Потеряшки</a></li>
                 <li><a href="">Контакты</a></li>
             </ul>
         </header>
         <main>
+            <?= $form_content?>
             <?= $content ?>
         </main>
     </body>
