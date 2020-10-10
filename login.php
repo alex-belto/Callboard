@@ -11,23 +11,29 @@ $form_content="<form action='' method='POST'>
     <input type='submit' name='submit' value='Отправить'>
 </form>";
 
-if(isset($_POST['login'], $_POST['password'])){
+if(isset($_POST['login'])){
     $login = $_POST['login'];
-    $password = $_POST['password'];
 
-    $query="SELECT * FROM users WHERE login = '$login' AND password = '$password'";
-    $result = mysqli_query($link, $query);
-    
-    $user = mysqli_fetch_assoc($result);
-    //var_dump($user);
+    $query="SELECT * FROM users WHERE login = '$login'";
+    $user =mysqli_fetch_assoc(mysqli_query($link, $query));
+
     if(!empty($user)){
-        $_SESSION['auth']= true;
-        $_SESSION['id']=$user['id'];
-        header('location: index.php');
-        echo 'Авторизация успешна';
+        $hash = $user['password'];
+        $password = password_verify($_POST['password'], $hash);
+
+        if($hash == $password){
+            $_SESSION['auth']= true;
+            $_SESSION['id']=$user['id'];
+            header('location: index.php');
+            echo 'Авторизация успешна';
+            
+        }else{
+            echo 'Введенные данные для авторизации не верны!';
+        }
     }else{
-        echo 'Проверьте введенные вами данные';
+        echo 'Введенные данные для авторизации не верны!';
     }
+    
 }
 
 include 'layout.php';
