@@ -1,15 +1,10 @@
 <?php
 
 include 'include.php';
+include 'form.php';
 $content='';
 
-$form_content="<form action='' method='POST'>
-    <p>Введите ваш логин:</p>
-    <input type='text' name='login'>
-    <p>Введите ваш пароль:</p>
-    <input type='password' name='password'><br><br>
-    <input type='submit' name='submit' value='Отправить'>
-</form>";
+$form_content=form2();
 
 if(isset($_POST['login'])){
     $login = $_POST['login'];

@@ -1,9 +1,11 @@
 <?php
 
 include  'include.php';
+include 'form.php';
 $content='';
 $_SESSION['login_messg']='Введите жедаемый логин:';
-$_SESSION['passw_messg'] = 'Введите желаемый пароль:';
+$_SESSION['passw_messg'] = 'Введите желаемый пароль';
+$_SESSION['mail'] = 'Введите ваш email:';
 
 
 
@@ -16,7 +18,7 @@ function registration($link){
         $phone=$_POST['phone'];
         $login =$_POST['login'];
         $password= password_hash($_POST['password'], PASSWORD_DEFAULT);
-        
+
         if($_POST['password'] == $_POST['confirm'] AND preg_match('#^[A-Za-z0-9]{6,15}$#', $_POST['password'])==1){//Проверка на совпадение пароля (1)
 
             $query="SELECT * FROM users WHERE login = '$login'";//Проверка на уникальность логина(2)
@@ -36,51 +38,45 @@ function registration($link){
              header('location: index.php');
 
                 }else{
-                    //$_SESSION['mail'] ='Ваш email не соответствует формату, пожалуйста проверьте введенный вами email';//(3)
-                    echo 'Ваш email не соответствует формату, пожалуйста проверьте введенный вами email';
+                    $_SESSION['mail'] ='Ваш email не соответствует формату, пожалуйста проверьте введенный вами email';//(3)
+                    //echo 'Ваш email не соответствует формату, пожалуйста проверьте введенный вами email';
                 }
             }else{
-                //  $_SESSION['login_messg']= 'Данный логин не соответствует требованиям:</br>
-                // 1)Убедитесь что ваш логин состоит исключительно из символов латинского алфавита и цифр от 0 до 9</br>
-                // 2)В инном случае, ваш логин занят другим пользователем, попробуйте изменить его!';//(2)
-                echo 'Данный логин не соответствует требованиям:</br>
+                 $_SESSION['login_messg']= 'Данный логин не соответствует требованиям:</br>
+                1)Убедитесь что ваш логин состоит исключительно из символов латинского алфавита и цифр от 0 до 9</br>
+                2)В инном случае, ваш логин занят другим пользователем, попробуйте изменить его!';//(2)
+                
+                //echo 'Данный логин не соответствует требованиям:</br>
                 // 1)Убедитесь что ваш логин состоит исключительно из символов латинского алфавита и цифр от 0 до 9</br>
                 // 2)В инном случае, ваш логин занят другим пользователем, попробуйте изменить его!';
+           
             }
 
            
         }else{
-            // $_SESSION['passw_messg']= 'Ошибка регистрации пароля:</br>
-            // Убедитель в том что ваш пароль состоит из символов латинского алфавита, цифр от 0 до 9, и занимает от 4 до 12 символов</br>
-            // В противном случае проверьте соответсвует ли ваш пароль проверочному паролю!';//(1)
-            echo 'Ошибка регистрации пароля:</br>
+            $_SESSION['passw_messg']= 'Ошибка регистрации пароля:</br>
+            Убедитель в том что ваш пароль состоит из символов латинского алфавита, цифр от 0 до 9, и занимает от 4 до 12 символов</br>
+            В противном случае проверьте соответсвует ли ваш пароль проверочному паролю!';//(1)
+            //echo 'Ошибка регистрации пароля:</br>
             // Убедитель в том что ваш пароль состоит из символов латинского алфавита, цифр от 0 до 9, и занимает от 4 до 12 символов</br>
             // В противном случае проверьте соответсвует ли ваш пароль проверочному паролю!';
+            
         }
 
         
 
+    }else{
+        $_SESSION['gaps']= 'Заполните все поля';
     }
 
 }
-$login = $_SESSION['login_messg'];
-$password= $_SESSION['passw_messg'];
-$form_content="
-<form action='' method='POST'>
-    <p><?php?>Введите ваше Имя и Фамилию:</p>
-    <input type='text' name='name'>
-    <p>Введите ваш email:</p>
-    <input type='email' name='email'>
-    <p>Введите номер вашего телефона:</p>
-    <input type='tel' name='phone'>
-    <p>$login</p>
-    <input type='text' name='login'>
-    <p>$password</p>
-    <input type='password' name='password'>
-    <p>Подтвердите желаемый  пароль:</p>
-    <input type='password' name='confirm'><br><br>
-    <input type='submit' name='submit' value='Отправить'> 
-</form>";
-
 registration($link);
+
+$login_messg = $_SESSION['login_messg'];
+$password_messg = $_SESSION['passw_messg'];
+$mail_messg=$_SESSION['mail'];
+
+$form_content= form($login_messg, $password_messg,$mail_messg);
+
+
 include 'layout.php';
