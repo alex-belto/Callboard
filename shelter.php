@@ -1,19 +1,9 @@
 <?php
 include 'include.php';
+include 'form.php';
 $content='';
 $access ='0';
-$form_content="
-<form action='' method='POST'>
-    <p>Введите вваше обращение:</p>
-    <textarea name='text' placeholder='Кот, Барсик, белый, 2,5 года'></textarea>
-    <p>Введите ваше Имя и Фамилию:</p>
-    <input type='text' name='name' placeholder='Иванов Иван'>
-    <p>Введите ваш email:</p>
-    <input type='email' name='email'>
-    <p>Введите номер вашего телефона:</p>
-    <input type='tel' name='phone'><br><br>
-    <input type='submit' name='submit' value='Отправить'>
-</form> ";
+$form_content= form3();
 
 function addNote($link){
     if(isset($_POST['text']) and isset($_POST['name']) and isset($_POST['email']) and isset($_POST['phone'])){
