@@ -38,12 +38,8 @@ function form3(){
 <form action='' method='POST'>
     <p>Введите вваше обращение:</p>
     <textarea name='text' placeholder='Кот, Барсик, белый, 2,5 года'></textarea>
-    <p>Введите ваше Имя и Фамилию:</p>
-    <input type='text' name='name' placeholder='Иванов Иван'>
-    <p>Введите ваш email:</p>
-    <input type='email' name='email'>
     <p>Введите номер вашего телефона:</p>
-    <input type='tel' name='phone'><br><br>
+    <input type='tel' name='contacts'><br><br>
     <input type='submit' name='submit' value='Отправить'>
 </form> ";
 }
@@ -53,7 +49,7 @@ function form4(){
 <form action='' method='POST'>
     <p>Введите вваше обращение:</p>
     <textarea name='text' placeholder='Найден Кот в раёне набережной, белый, примерный возраст 2,5 года'></textarea>
-    <p>Введите ваши номер тедефона:</p>
+    <p>Введите ваш номер тедефона:</p>
     <input type='tel' name='contacts'><br><br>
     <input type='submit' name='submit' value='Отправить'>
 </form> ";

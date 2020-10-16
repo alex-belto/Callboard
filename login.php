@@ -3,6 +3,10 @@
 include 'include.php';
 include 'form.php';
 $content='';
+if(isset($_SESSION['message'])){
+    echo $_SESSION['message'];
+}
+
 
 $form_content=form2();
 
@@ -19,8 +23,13 @@ if(isset($_POST['login'])){
         if($hash == $password){
             $_SESSION['auth']= true;
             $_SESSION['id']=$user['id'];
-            header('location: index.php');
+            $_SESSION['name'] = $user['name'];
+            $_SESSION['login']= $user['login'];
+            $_SESSION['phone_numb']= $user['phone_numb'];
+            $_SESSION['email']= $user['email'];
+
             echo 'Авторизация успешна';
+            header('location: index.php');
             
         }else{
             echo 'Введенные данные для авторизации не верны!';

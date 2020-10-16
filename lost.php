@@ -1,6 +1,7 @@
 <?php
 include 'include.php';
 include 'form.php';
+include 'profile.php';
 $content='';
 $form_content= form4();
 
@@ -8,11 +9,8 @@ function addNote($link){
     if(isset($_POST['text']) and isset($_POST['contacts'])){
        $text= $_POST['text'];
        $contacts= $_POST['contacts'];
-       if(isset($_SESSION['id'])){
-           $id = $_SESSION['id'];
-       }else{
-           $id = '5';
-       }
+       $id = $_SESSION['id'];
+       
 
         $query="INSERT INTO advert (text, user_id, contacts, issue) VALUES ('$text', '$id','$contacts', '2')";
         mysqli_query($link, $query) or die(mysqli_error($link));

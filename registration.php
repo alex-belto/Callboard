@@ -32,10 +32,9 @@ function registration($link){
                 $query="INSERT INTO users (name, email, phone_numb, login, password, access)
              VALUE ('$name', '$email', '$phone', '$login', '$password', '1')";
             mysqli_query($link, $query) or die(mysqli_error($link));
-
-                $_SESSION['auth']= 'true';
-                $_SESSION['id']= $user['id'];
-             header('location: index.php');
+            
+            $_SESSION['message']= 'Решистрация прошла успешно, авторизируйтесь для входа на сайт';
+             header('location: login.php');
 
                 }else{
                     $_SESSION['mail'] ='Ваш email не соответствует формату, пожалуйста проверьте введенный вами email';//(3)
