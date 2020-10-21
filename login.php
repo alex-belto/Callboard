@@ -3,9 +3,7 @@
 include 'include.php';
 include 'form.php';
 $content='';
-if(isset($_SESSION['message'])){
-    echo $_SESSION['message'];
-}
+
 
 
 $form_content=form2();
@@ -28,14 +26,14 @@ if(isset($_POST['login'])){
             $_SESSION['phone_numb']= $user['phone_numb'];
             $_SESSION['email']= $user['email'];
 
-            echo 'Авторизация успешна';
-            header('location: index.php');
+            $_SESSION['message'] = 'Авторизация успешна';
+            header('location: index.php'); die();
             
         }else{
-            echo 'Введенные данные для авторизации не верны!';
+            $_SESSION['message'] = 'Введенные данные для авторизации не верны!';
         }
     }else{
-        echo 'Введенные данные для авторизации не верны!';
+        $_SESSION['message'] = 'Введенные данные для авторизации не верны!';
     }
     
 }

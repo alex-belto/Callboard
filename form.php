@@ -1,19 +1,19 @@
 <?php
 
-function form($login_messg, $password_messg, $mail_messg){
+function form(){
 
 
 return $form_content="
     <form action='' method='POST'>
         <p>Введите ваше Имя и Фамилию:</p>
         <input type='text' name='name'>
-        <p>$mail_messg</p>
+        <p>Введите ваш email:</p>
         <input type='email' name='email'>
         <p>Введите номер вашего телефона:</p>
         <input type='tel' name='phone'>
-        <p>$login_messg</p>
+        <p>Введите жедаемый логин:</p>
         <input type='text' name='login'>
-        <p>$password_messg</p>
+        <p>Введите желаемый пароль</p>
         <input type='password' name='password'>
         <p>Подтвердите желаемый  пароль:</p>
         <input type='password' name='confirm'><br><br>
@@ -44,13 +44,17 @@ function form3(){
 </form> ";
 }
 function form4(){
-
+if(isset($_SESSION['phone_numb'])){
+    $phone_numb = $_SESSION['phone_numb'];
+}else{
+    $phone_numb = '';
+}
    return $form_content="
 <form action='' method='POST'>
     <p>Введите вваше обращение:</p>
     <textarea name='text' placeholder='Найден Кот в раёне набережной, белый, примерный возраст 2,5 года'></textarea>
     <p>Введите ваш номер тедефона:</p>
-    <input type='tel' name='contacts'><br><br>
+    <input type='tel' name='contacts' value=\"$phone_numb\"><br><br>
     <input type='submit' name='submit' value='Отправить'>
 </form> ";
 }

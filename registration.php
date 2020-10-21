@@ -3,9 +3,6 @@
 include  'include.php';
 include 'form.php';
 $content='';
-$_SESSION['login_messg']='Введите жедаемый логин:';
-$_SESSION['passw_messg'] = 'Введите желаемый пароль';
-$_SESSION['mail'] = 'Введите ваш email:';
 
 
 
@@ -29,19 +26,20 @@ function registration($link){
                 if(preg_match('#^[a-z0-9._-]{4,16}\@[a-z]{2,6}\.[a-z]{2,3}$#', $email)==1){//Проверка email(3)
 
             
-                $query="INSERT INTO users (name, email, phone_numb, login, password, access)
-             VALUE ('$name', '$email', '$phone', '$login', '$password', '1')";
-            mysqli_query($link, $query) or die(mysqli_error($link));
+                $query="INSERT INTO users (name, email, phone_numb, login, password, block_time)
+                VALUE ('$name', '$email', '$phone', '$login', '$password', '0')";
+                mysqli_query($link, $query) or die(mysqli_error($link));
             
-            $_SESSION['message']= 'Решистрация прошла успешно, авторизируйтесь для входа на сайт';
-             header('location: login.php');
+                $_SESSION['message']= 'Регистрация прошла успешно, авторизируйтесь для входа на сайт';
+
+                header('location: login.php');die();
 
                 }else{
-                    $_SESSION['mail'] ='Ваш email не соответствует формату, пожалуйста проверьте введенный вами email';//(3)
+                    $_SESSION['message'] ='Ваш email не соответствует формату, пожалуйста проверьте введенный вами email';//(3)
                     //echo 'Ваш email не соответствует формату, пожалуйста проверьте введенный вами email';
                 }
             }else{
-                 $_SESSION['login_messg']= 'Данный логин не соответствует требованиям:</br>
+                 $_SESSION['message']= 'Данный логин не соответствует требованиям:</br>
                 1)Убедитесь что ваш логин состоит исключительно из символов латинского алфавита и цифр от 0 до 9</br>
                 2)В инном случае, ваш логин занят другим пользователем, попробуйте изменить его!';//(2)
                 
@@ -53,7 +51,7 @@ function registration($link){
 
            
         }else{
-            $_SESSION['passw_messg']= 'Ошибка регистрации пароля:</br>
+            $_SESSION['message']= 'Ошибка регистрации пароля:</br>
             Убедитель в том что ваш пароль состоит из символов латинского алфавита, цифр от 0 до 9, и занимает от 4 до 12 символов</br>
             В противном случае проверьте соответсвует ли ваш пароль проверочному паролю!';//(1)
             //echo 'Ошибка регистрации пароля:</br>
@@ -65,17 +63,16 @@ function registration($link){
         
 
     }else{
-        $_SESSION['gaps']= 'Заполните все поля';
+        if(isset($_POST['submit'])){
+            $_SESSION['message']= 'Заполните все поля';
+        }
     }
 
 }
 registration($link);
 
-$login_messg = $_SESSION['login_messg'];
-$password_messg = $_SESSION['passw_messg'];
-$mail_messg=$_SESSION['mail'];
 
-$form_content= form($login_messg, $password_messg,$mail_messg);
+$form_content= form();
 
 
 include 'layout.php';
