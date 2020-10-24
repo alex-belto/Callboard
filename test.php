@@ -3,25 +3,13 @@ include 'include.php';
 $form_content = '';
 $content = '';
 
-if(empty($_SESSION['id'])){
-    $id = 5;
-}else{
-    $id = $_SESSION['id'];
-}
+$query="SELECT position, user_id,  id FROM advert WHERE position = (SELECT MAX(position) FROM advert )"; //Достаю максимальную позицию
+    $result = mysqli_fetch_assoc(mysqli_query($link, $query));
+    $topPosition = $result['position']; //текущее максимальное положение
+    $topId = $result['id'];//id максимальной позиции
+    
+    echo $topPosition;?> <br> <?php
+    echo $topId;
 
-$query= "SELECT block_time FROM users WHERE id = '$id'";
-$result = mysqli_fetch_assoc(mysqli_query($link, $query));
-$limit = $result['block_time'];
-
-
-if(time() > $limit){
-    echo 'go';
-}else{
-    echo 'stop';
-}
-
-echo time();
-echo $limit;
-//var_dump($limit);
 
 include 'layout.php';

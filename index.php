@@ -29,8 +29,7 @@ function getList($link){
         $phone_numb = $value['phone_numb'];
         $email = $value['email'];
         $ad_user_id= $value['id'];
-
-        $_SESSION['$ad_id'] = $value['ad_id'];
+        $ad_id = $value['ad_id'];
 
         
         $content.="
@@ -50,8 +49,8 @@ function getList($link){
             if($user_id == $ad_user_id){
                 
                 $content.="<tr>
-                                <td><form method='POST'>
-                                <input type='submit' name='submit' value='Update'>
+                                <td><form method='GET'>
+                                <button><a href=\"?jump=$ad_id\">Top up</a></button>
                                 </form></td>
                             </tr>";
             }
