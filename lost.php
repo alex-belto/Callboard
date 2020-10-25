@@ -43,7 +43,7 @@ function jump($link){
     if(isset($_GET['position']) AND isset($_GET['ad_id'])){
         $positionUpdate= $_GET['position'];// id записи которая апдейтится
         $ad_id = $_GET['ad_id']; 
-        // if(time() > $limit){//наличие блокировки в данный момент
+        if(time() > $limit){//наличие блокировки в данный момент
             $query= "SELECT id, position FROM advert WHERE position  BETWEEN '$positionUpdate' AND '$topPosition'";
             $result =  mysqli_query($link, $query) or die(mysqli_error($link));
             for($arr=[]; $step= mysqli_fetch_assoc($result); $arr[] = $step);
@@ -61,11 +61,11 @@ function jump($link){
         $query="UPDATE users SET block_time='$block_time' WHERE id = '$id' "; // блок на аккаунт пользователя - 24 часа
         mysqli_query($link, $query) or die(mysqli_error($link));
 
-        $_SESSION['message']="Ваша запись поднята в топ, следующая попытка возможна .$freeTime";
+        $_SESSION['message']="Ваша запись поднята в топ, следующая попытка возможна $freeTime";
 
-        // }else{
-        //     $_SESSION['message']= "Ваш лемит поднятий в топ на сегодня привышен, следующая попытка возможна .$freeTime";
-        // }
+        }else{
+            $_SESSION['message']= "Ваш лемит поднятий в топ на сегодня привышен, следующая попытка возможна $freeTime";
+        }
     }
 }
 
@@ -122,7 +122,7 @@ function getList($link){
                 <tr>
                     <td>$email</td>
                 </tr>";
-                if($user_id == $ad_user_id){
+                if($user_id == $ad_user_id AND $user_id != 5){
                 
                     $content.="<tr>
                                     <td><form method='GET'>
