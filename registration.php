@@ -3,7 +3,7 @@
 include  'include.php';
 include 'form.php';
 $content='';
-
+$formContent= registrationForm();
 
 
 function registration($link){
@@ -70,9 +70,6 @@ function registration($link){
 
 }
 registration($link);
-
-
-$form_content= form();
 
 
 include 'layout.php';

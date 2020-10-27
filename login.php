@@ -6,7 +6,7 @@ $content='';
 
 
 
-$form_content=form2();
+$formContent=loginForm();
 
 if(isset($_POST['login'])){
     $login = $_POST['login'];

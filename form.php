@@ -1,9 +1,9 @@
 <?php
 
-function form(){
+function registrationForm(){
 
 
-return $form_content="
+return $formContent = "
     <form action='' method='POST'>
         <p>Введите ваше Имя и Фамилию:</p>
         <input type='text' name='name'>
@@ -21,9 +21,9 @@ return $form_content="
     </form>";
 }
 
-function form2(){
+function loginForm(){
 
-return $form_content="<form action='' method='POST'>
+return $formContent = "<form action='' method='POST'>
         <p>Введите ваш логин:</p>
         <input type='text' name='login'>
         <p>Введите ваш пароль:</p>
@@ -32,29 +32,33 @@ return $form_content="<form action='' method='POST'>
     </form>";
 }
 
-function form3(){
-
-  return $form_content="
+function shelterForm(){
+    if(isset($_SESSION['phone_numb'])){
+        $phoneNumb = $_SESSION['phone_numb'];
+    }else{
+        $phoneNumb = '';
+    }
+  return $formContent = "
 <form action='' method='POST'>
     <p>Введите вваше обращение:</p>
     <textarea name='text' placeholder='Кот, Барсик, белый, 2,5 года'></textarea>
     <p>Введите номер вашего телефона:</p>
-    <input type='tel' name='contacts'><br><br>
+    <input type='tel' name='contacts' value=\"$phoneNumb\"><br><br>
     <input type='submit' name='submit' value='Отправить'>
 </form> ";
 }
-function form4(){
+function lostForm(){
 if(isset($_SESSION['phone_numb'])){
-    $phone_numb = $_SESSION['phone_numb'];
+    $phoneNumb = $_SESSION['phone_numb'];
 }else{
-    $phone_numb = '';
+    $phoneNumb = '';
 }
-   return $form_content="
+   return $formContent = "
 <form action='' method='POST'>
     <p>Введите вваше обращение:</p>
     <textarea name='text' placeholder='Найден Кот в раёне набережной, белый, примерный возраст 2,5 года'></textarea>
-    <p>Введите ваш номер тедефона:</p>
-    <input type='tel' name='contacts' value=\"$phone_numb\"><br><br>
+    <p>Введите ваш номер телефона:</p>
+    <input type='tel' name='contacts' value=\"$phoneNumb\"><br><br>
     <input type='submit' name='submit' value='Отправить'>
 </form> ";
 }
