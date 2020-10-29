@@ -15,7 +15,8 @@
                 <li><a href = "">Контакты</a></li>
                 <?php
                 if(!empty($_SESSION['auth'])){
-                    ?><li><a href = "logout.php">Выйти из ситсемы</a></li><?php
+                    ?><li><a href = "logout.php">Выйти из ситсемы</a></li>
+                    <li><?= $_SESSION['name'] ?></li><?php
                 }else{?>
                 <li><a href = "login.php">Автоотзация</a></li>
                 <li><a href = "registration.php">Регистрация</a></li><?php

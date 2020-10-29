@@ -10,8 +10,8 @@ function jump($link){
     $id = $_SESSION['id'];
     
     $query = "SELECT * FROM users WHERE id = '$id'";// достаю существующий block_time
-       $result = mysqli_fetch_assoc(mysqli_query($link, $query));
-       $limit = $result['block_time'];//существующий block_time
+    $result = mysqli_fetch_assoc(mysqli_query($link, $query));
+    $limit = $result['block_time'];//существующий block_time
 
     $query = "SELECT position, user_id,  id FROM advert WHERE position = (SELECT MAX(position) FROM advert )"; //Достаю максимальную позицию
     $result = mysqli_fetch_assoc(mysqli_query($link, $query));
@@ -75,8 +75,10 @@ function getList($link){
         $adPosition = $value['position'];
         $adUserId = $value['id'];
         $adId = $value['ad_id'];
-        
+        $count = 0;
 
+        $query="SELECT COUNT(*) as count FROM comments WHERE ad_id = '$adId'";
+        $count= mysqli_fetch_assoc(mysqli_query($link, $query))['count'];
         
         $content.="
             <table>
@@ -92,13 +94,20 @@ function getList($link){
                 <tr>
                     <td>$email</td>
                 </tr>";
+            if($userId != 5){
+                $content.= "<tr>
+                    <td><form method='GET'>
+                    <button><a href=\"comment.php?ad_id=$adId&&count=$count\">Комментарии $count</a></button> 
+                    </form></td>
+                </tr>"; //Кнопака коммента
+            }
             if($userId == $adUserId AND $userId != 5){
                 
                 $content.="<tr>
                                     <td><form method='GET'>
                                     <button><a href=\"index.php?position=$adPosition&ad_id=$adId\">Top up</a></button>
                                     </form></td>
-                                </tr>";
+                                </tr>"; //Кнопка поднятия позиции
             }
         $content.="</table><br>";
     }
@@ -110,7 +119,7 @@ function getList($link){
 
     if($page != 1){
         $previous = $page-1;
-        $content.= "<a href=\"?page = $previous\"><<<</a>";//стрелки
+        $content.= "<a href=\"?page=$previous\"><<<</a>";//стрелки
     }
 
     for($i = 1; $i <= $numbsOfPage; $i++){

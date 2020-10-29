@@ -104,6 +104,10 @@ function getList($link){
             $phoneNumb = $value['phone_numb'];
         }
         $email = $value['email'];
+        $count = 0;
+
+        $query="SELECT COUNT(*) as count FROM comments WHERE ad_id = '$adId'";
+        $count= mysqli_fetch_assoc(mysqli_query($link, $query))['count'];
 
         $content.="
             <table>
@@ -122,6 +126,13 @@ function getList($link){
                 <tr>
                     <td>$email</td>
                 </tr>";
+                if($userId != 5){
+                    $content.= "<tr>
+                        <td><form method='GET'>
+                        <button><a href=\"comment.php?ad_id=$adId&&count=$count\">Комментарии $count</a></button> 
+                        </form></td>
+                    </tr>"; //Кнопака коммента
+                }
                 if($userId == $adUserId AND $userId != 5){
                 
                     $content.="<tr>
