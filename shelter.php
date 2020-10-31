@@ -69,7 +69,7 @@ function jump($link){
 function getList($link){
 
     $userId = $_SESSION['id'];// id авторизированого пользователя
-
+    $userRole = $_SESSION['role'];
 
     if(isset($_GET['page'])){
         $page = $_GET['page'];
@@ -80,7 +80,7 @@ function getList($link){
     $notesOnPage = 2;
     $referencePoint = ($page - 1) * $notesOnPage;
 
-    $query = "SELECT text, position, contacts, users.id , advert.id as adId, name, phone_numb, email FROM users
+    $query = "SELECT text, position, contacts, status, users.id , advert.id as adId, name, phone_numb, email FROM users
     RIGHT JOIN advert ON users.id = advert.user_id WHERE issue = '1' ORDER BY position DESC LIMIT $referencePoint, $notesOnPage ";
     $result = mysqli_query($link, $query) or die(mysqli_error($link));
     $content = '';
@@ -94,6 +94,7 @@ function getList($link){
         $adId = $value['adId'];
         $adPosition = $value['position'];
         $adUserId = $value['id'];
+        $status = $value['status'];
         if(!empty($contacts)){
             $phoneNumb = '';
         }else{
@@ -122,14 +123,27 @@ function getList($link){
                 <tr>
                     <td>$email</td>
                 </tr>";
-                if($userId != 5){
+                if($userRole == 'moderator' OR $userRole == 'admin'){
+                    $content.= "<tr>
+                        <td><form method='GET'>";
+                    if($status == 'active'){  
+                    $content.="<button><a href=\"?banUserId=$adUserId\">Забанить </a></button>";
+                    }else{
+                    $content.= "<button><a href=\"?banUserId=$adUserId\">Разбанить </a></button>";
+                    }
+                    $content.= "<button><a href=\"?dellAdId=$adId\">Удалить запись</a></button> 
+                        <button><a href=\"?editAdId=$adId\">Редактировать запись</a></button>
+                        </form></td>
+                    </tr>"; //Функционал модера
+                }
+                if($userRole != 'guest'){
                     $content.= "<tr>
                         <td><form method='GET'>
                         <button><a href=\"comment.php?ad_id=$adId&&count=$count\">Комментарии $count</a></button> 
                         </form></td>
                     </tr>"; //Кнопака коммента
                 }
-                if($userId == $adUserId AND $userId != 5){
+                if($userId == $adUserId AND $userRole != 'guest'){
                 
                     $content.="<tr>
                                     <td><form method='GET'>

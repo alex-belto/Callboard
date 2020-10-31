@@ -28,6 +28,7 @@ function getAd($link){
     }else{
         $page = 1;
     }
+    $userRole = $_SESSION['role'];
 
    $query = "SELECT text, name, phone_numb, email FROM users 
    RIGHT JOIN advert ON users.id = advert.user_id WHERE advert.id = '$adId'";
@@ -61,7 +62,7 @@ function getAd($link){
         if(isset($_GET['count']) AND $_GET['count'] > 0){
 
            
-
+            $count = $_GET['count'];
             $notesOnPage = 2;
             $referencePoint = ($page - 1 ) * $notesOnPage;
 
@@ -72,13 +73,13 @@ function getAd($link){
             foreach($arr as $value){
                 $text = $value['text'];
                 $date = date('Y-m-d H:i:s', $value['date']);
-                $userId = $value['user_id'];
+                $adUserId = $value['user_id'];
 
-                $query = "SELECT  name, email FROM users WHERE id = '$userId'";
+                $query = "SELECT  name, status, email FROM users WHERE id = '$adUserId'";
                 $result = mysqli_fetch_assoc(mysqli_query($link, $query));
                 $name = $result['name'];
                 $email = $result['email']; 
-
+                $status = $result['status'];
             $content .= "<tr>
             <td>------------------------------------</td>
             </tr>
@@ -95,6 +96,19 @@ function getAd($link){
                 <td>$email</td>
             </tr>";
 
+            }
+            if($userRole == 'moderator' OR $userRole == 'admin'){
+                $content.= "<tr>
+                    <td><form method='GET'>";
+                if($status == 'active'){  
+                $content.="<button><a href=\"?ad_id=$adId&&count=$count&&banUserId=$adUserId\">Забанить </a></button>";
+                }else{
+                $content.= "<button><a href=\"?ad_id=$adId&&count=$count&&banUserId=$adUserId\">Разбанить </a></button>";
+                }
+                $content.= "<button><a href=\"?ad_id=$adId&&count=$count&&dellAdId=$adId\">Удалить запись</a></button> 
+                    <button><a href=\"?ad_id=$adId&&count=$count&&editAdId=$adId\">Редактировать запись</a></button>
+                    </form></td>
+                </tr>"; //Функционал модера
             }
             $content.= "</table><br><br>";
 

@@ -26,8 +26,8 @@ function registration($link){
                 if(preg_match('#^[a-z0-9._-]{4,16}\@[a-z]{2,6}\.[a-z]{2,3}$#', $email)==1){//Проверка email(3)
 
             
-                $query="INSERT INTO users (name, email, phone_numb, login, password, block_time)
-                VALUE ('$name', '$email', '$phone', '$login', '$password', '0')";
+                $query="INSERT INTO users (name, email, phone_numb, login, password, block_time, status, role)
+                VALUE ('$name', '$email', '$phone', '$login', '$password', '0', 'active', 'user')";
                 mysqli_query($link, $query) or die(mysqli_error($link));
             
                 $_SESSION['message']= 'Регистрация прошла успешно, авторизируйтесь для входа на сайт';

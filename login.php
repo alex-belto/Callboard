@@ -17,6 +17,8 @@ if(isset($_POST['login'])){
     if(!empty($user)){
         $hash = $user['password'];
         $password = password_verify($_POST['password'], $hash);
+        $status = $user['status'];
+        $role = $user['role'];
 
         if($hash == $password){
             $_SESSION['auth']= true;
@@ -25,7 +27,8 @@ if(isset($_POST['login'])){
             $_SESSION['login']= $user['login'];
             $_SESSION['phone_numb']= $user['phone_numb'];
             $_SESSION['email']= $user['email'];
-
+            $_SESSION['status'] = $user['status'];
+            $_SESSION['role'] = $user['role'];
             $_SESSION['message'] = 'Авторизация успешна';
             header('location: index.php'); die();
             
