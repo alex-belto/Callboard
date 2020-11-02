@@ -1,6 +1,7 @@
 <?php
 include 'include.php';
 include 'profile.php';
+include 'functions.php';
 $formContent = '';
 
 function jump($link){
@@ -99,11 +100,11 @@ function getList($link){
                 $content.= "<tr>
                     <td><form method='GET'>";
                 if($status == 'active'){  
-                $content.="<button><a href=\"?banUserId=$adUserId\">Забанить </a></button>";
+                $content.="<button><a href=\"?banUserId=$adUserId\">Забанить</a></button> ";
                 }else{
-                $content.= "<button><a href=\"?banUserId=$adUserId\">Разбанить </a></button>";
+                $content.= "<button><a href=\"?unbanUserId=$adUserId\">Разбанить</a></button> ";
                 }
-                $content.= "<button><a href=\"?dellAdId=$adId\">Удалить запись</a></button> 
+                $content.= "<button><a href=\"?delAdId=$adId\">Удалить запись</a></button> 
                     <button><a href=\"?editAdId=$adId\">Редактировать запись</a></button>
                     </form></td>
                 </tr>"; //Функционал модера
@@ -151,6 +152,10 @@ if(isset($_SESSION['positionUpdate'])){
     echo $_SESSION['positionUpdate'] = $ad_id;
 }
 
+delete($link);
+$formContent = editForm($link);
+edit($link, 'index.php');
+ban($link);
 jump($link);
 $content = getList($link);
 

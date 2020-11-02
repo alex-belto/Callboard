@@ -2,8 +2,12 @@
 include 'include.php';
 include 'form.php';
 include 'profile.php';
+include 'functions.php';
 $content = '';
 $formContent = lostForm();
+if(isset($_GET['editAdId'])){
+    $formContent = editForm($link);
+}
 
 function addNote($link){
     if(isset($_POST['text']) and isset($_POST['contacts'])){
@@ -133,9 +137,9 @@ function getList($link){
                     if($status == 'active'){  
                     $content.="<button><a href=\"?banUserId=$adUserId\">Забанить </a></button>";
                     }else{
-                    $content.= "<button><a href=\"?banUserId=$adUserId\">Разбанить </a></button>";
+                    $content.= "<button><a href=\"?unbanUserId=$adUserId\">Разбанить </a></button>";
                     }
-                    $content.= "<button><a href=\"?dellAdId=$adId\">Удалить запись</a></button> 
+                    $content.= "<button><a href=\"?delAdId=$adId\">Удалить запись</a></button> 
                         <button><a href=\"?editAdId=$adId\">Редактировать запись</a></button>
                         </form></td>
                     </tr>"; //Функционал модера
@@ -180,6 +184,9 @@ function getList($link){
     return $content;
 }
 jump($link);
+ban($link);
+edit($link, 'lost.php');
+delete($link);
 addNote($link);
 $content = getList($link);
 

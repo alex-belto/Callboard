@@ -2,7 +2,12 @@
 include 'include.php';
 include 'profile.php';
 include 'form.php';
+include 'functions.php';
 
+$formContent = commentForm();
+if(isset($_GET['editCommentId'])){
+    $formContent = editForm($link);
+}
 function addComment($link){
     if(isset($_SESSION['id']) AND isset($_GET['ad_id']) AND isset($_POST['text'])){
     $userId = $_SESSION['id'];
@@ -29,12 +34,13 @@ function getAd($link){
         $page = 1;
     }
     $userRole = $_SESSION['role'];
+    
 
    $query = "SELECT text, name, phone_numb, email FROM users 
    RIGHT JOIN advert ON users.id = advert.user_id WHERE advert.id = '$adId'";
    $result = mysqli_fetch_assoc(mysqli_query($link, $query));
-
    $content = '';
+   
    $text = $result['text'];
    $name = $result['name'];
    $phoneNumb = $result['phone_numb'];
@@ -74,12 +80,14 @@ function getAd($link){
                 $text = $value['text'];
                 $date = date('Y-m-d H:i:s', $value['date']);
                 $adUserId = $value['user_id'];
+                $commentId = $value['id'];
 
                 $query = "SELECT  name, status, email FROM users WHERE id = '$adUserId'";
                 $result = mysqli_fetch_assoc(mysqli_query($link, $query));
                 $name = $result['name'];
                 $email = $result['email']; 
                 $status = $result['status'];
+
             $content .= "<tr>
             <td>------------------------------------</td>
             </tr>
@@ -96,22 +104,24 @@ function getAd($link){
                 <td>$email</td>
             </tr>";
 
-            }
+            
             if($userRole == 'moderator' OR $userRole == 'admin'){
-                $content.= "<tr>
+                $content .= "<tr>
                     <td><form method='GET'>";
                 if($status == 'active'){  
-                $content.="<button><a href=\"?ad_id=$adId&&count=$count&&banUserId=$adUserId\">Забанить </a></button>";
+                $content .= "<button><a href=\"?ad_id=$adId&&count=$count&&banUserId=$adUserId\">Забанить</a></button> ";
                 }else{
-                $content.= "<button><a href=\"?ad_id=$adId&&count=$count&&banUserId=$adUserId\">Разбанить </a></button>";
+                $content .= "<button><a href=\"?ad_id=$adId&&count=$count&&unbanUserId=$adUserId\">Разбанить</a></button> ";
                 }
-                $content.= "<button><a href=\"?ad_id=$adId&&count=$count&&dellAdId=$adId\">Удалить запись</a></button> 
-                    <button><a href=\"?ad_id=$adId&&count=$count&&editAdId=$adId\">Редактировать запись</a></button>
+                $content .= "<button><a href=\"?ad_id=$adId&&count=$count&&delCommentId=$commentId\">Удалить запись</a></button> 
+                    <button><a href=\"?ad_id=$adId&&count=$count&&editCommentId=$commentId\">Редактировать запись</a></button>
                     </form></td>
-                </tr>"; //Функционал модера
+                </tr>"; //Функционал модератора
             }
-            $content.= "</table><br><br>";
-
+            
+        }
+        $content.= "</table><br><br>";
+        
     $query = "SELECT COUNT(*) as count FROM comments WHERE ad_id = '$adId'";//Подсчет кол-ва записей
     $count = mysqli_fetch_assoc(mysqli_query($link, $query))['count'];
     $numbsOfPage = ceil($count/$notesOnPage);//кол-во страниц, число записей делим на желаемое на страницу
@@ -140,10 +150,16 @@ function getAd($link){
 
 }
 
+if(isset($_GET['ad_id']) AND isset($_GET['count'])){
+    $adId = $_GET['ad_id'];
+    $count = $_GET['count'];
+    $location = "comment.php?ad_id=$adId&&count=$count";
+}
 addComment($link);
+edit($link, $location);
+delete($link);
+ban($link);
 $content = getAd($link);
-$formContent = commentForm();
-
 
 
 
