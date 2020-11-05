@@ -62,3 +62,14 @@ if(isset($_SESSION['phone_numb'])){
     <input type='submit' name='submit' value='Отправить'>
 </form> ";
 }
+
+function commentForm(){
+    
+    return $formContent = "
+    <form action='' method='POST'>
+        <p>Введите ваш комментарий:</p>
+        <textarea name='text' placeholder=''></textarea><br><br>
+        
+        <input type='submit' name='submit' value='Отправить'>
+    </form>";
+}

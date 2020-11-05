@@ -1,6 +1,7 @@
 <?php
 include 'include.php';
 include 'profile.php';
+include 'functions.php';
 $formContent = '';
 
 function jump($link){
@@ -10,8 +11,8 @@ function jump($link){
     $id = $_SESSION['id'];
     
     $query = "SELECT * FROM users WHERE id = '$id'";// достаю существующий block_time
-       $result = mysqli_fetch_assoc(mysqli_query($link, $query));
-       $limit = $result['block_time'];//существующий block_time
+    $result = mysqli_fetch_assoc(mysqli_query($link, $query));
+    $limit = $result['block_time'];//существующий block_time
 
     $query = "SELECT position, user_id,  id FROM advert WHERE position = (SELECT MAX(position) FROM advert )"; //Достаю максимальную позицию
     $result = mysqli_fetch_assoc(mysqli_query($link, $query));
@@ -51,7 +52,7 @@ function jump($link){
 function getList($link){
 
     $userId = $_SESSION['id'];// id авторизированого пользователя
-
+    $userRole = $_SESSION['role']; //роль пользователя
     if(isset($_GET['page'])){
         $page = $_GET['page'];
     }else{
@@ -61,7 +62,7 @@ function getList($link){
     $notesOnPage = 4;
     $referencePoint = ($page - 1) * $notesOnPage;
 
-    $query = "SELECT text, users.id,  name, position, advert.id as ad_id, phone_numb, email FROM users
+    $query = "SELECT text, users.id, status,  name, position, advert.id as ad_id, phone_numb, email FROM users
     RIGHT JOIN advert ON users.id = advert.user_id ORDER BY position DESC LIMIT $referencePoint, $notesOnPage";
     $result = mysqli_query($link, $query) or die(mysqli_error($link));
     $content = '';
@@ -75,8 +76,11 @@ function getList($link){
         $adPosition = $value['position'];
         $adUserId = $value['id'];
         $adId = $value['ad_id'];
-        
+        $status = $value['status'];
+        $count = 0;
 
+        $query="SELECT COUNT(*) as count FROM comments WHERE ad_id = '$adId'";
+        $count= mysqli_fetch_assoc(mysqli_query($link, $query))['count'];
         
         $content.="
             <table>
@@ -92,13 +96,33 @@ function getList($link){
                 <tr>
                     <td>$email</td>
                 </tr>";
-            if($userId == $adUserId AND $userId != 5){
+            if($userRole == 'moderator' OR $userRole == 'admin'){
+                $content.= "<tr>
+                    <td><form method='GET'>";
+                if($status == 'active'){  
+                $content.="<button><a href=\"?banUserId=$adUserId\">Забанить</a></button> ";
+                }else{
+                $content.= "<button><a href=\"?unbanUserId=$adUserId\">Разбанить</a></button> ";
+                }
+                $content.= "<button><a href=\"?delAdId=$adId\">Удалить запись</a></button> 
+                    <button><a href=\"?editAdId=$adId\">Редактировать запись</a></button>
+                    </form></td>
+                </tr>"; //Функционал модера
+            }
+            if($userRole != 'guest'){
+                $content.= "<tr>
+                    <td><form method='GET'>
+                    <button><a href=\"comment.php?ad_id=$adId&&count=$count\">Комментарии $count</a></button> 
+                    </form></td>
+                </tr>"; //Кнопака коммента
+            }
+            if($userId == $adUserId AND $userRole != 'guest'){
                 
                 $content.="<tr>
                                     <td><form method='GET'>
                                     <button><a href=\"index.php?position=$adPosition&ad_id=$adId\">Top up</a></button>
                                     </form></td>
-                                </tr>";
+                                </tr>"; //Кнопка поднятия позиции
             }
         $content.="</table><br>";
     }
@@ -110,7 +134,7 @@ function getList($link){
 
     if($page != 1){
         $previous = $page-1;
-        $content.= "<a href=\"?page = $previous\"><<<</a>";//стрелки
+        $content.= "<a href=\"?page=$previous\"><<<</a>";//стрелки
     }
 
     for($i = 1; $i <= $numbsOfPage; $i++){
@@ -128,6 +152,10 @@ if(isset($_SESSION['positionUpdate'])){
     echo $_SESSION['positionUpdate'] = $ad_id;
 }
 
+delete($link);
+$formContent = editForm($link);
+edit($link, 'index.php');
+ban($link);
 jump($link);
 $content = getList($link);
 
